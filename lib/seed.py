@@ -15,6 +15,7 @@ session = Session()
 fake = Faker()
 
 # creating instances
+
 companies = []
 for _ in range(7):
     company = Company(
@@ -34,6 +35,14 @@ for _ in range(7):
 session.add_all(devs)
 session.commit()
 
+    # linking companies and devs many-to-many relationships
+for dev in devs:
+    associated_companies = random.sample(companies, random.randint(1,6))
+    for company in associated_companies:
+        dev.companies.append(company)
+session.commit()
+
+# freebies has-manys
 freebies = []
 item_names = ['Pens', 'Tshirts', 'Uber-discounts', 'Notebook', 'stickers']
 for _ in range(10):
