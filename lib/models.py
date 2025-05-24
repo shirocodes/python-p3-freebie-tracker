@@ -15,6 +15,8 @@ class Company(Base):
     id = Column(Integer(), primary_key=True)
     name = Column(String(), nullable=False)
     founding_year = Column(Integer(), nullable=False)
+    
+    freebies = relationship('Freebie', backref=backref())
 
     def __repr__(self):
         return f'<Company {self.name}>'
@@ -40,3 +42,5 @@ class Freebie(Base):
     def __repr__(self):
         return f'<Freebie {self.item_name}'
     
+    
+    # Built Freebies model & defined relationship with foreignkeys.
