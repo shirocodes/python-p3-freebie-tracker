@@ -1,4 +1,4 @@
-from sqlalchemy import ForeignKey, Column, Integer, String, MetaData
+from sqlalchemy import ForeignKey, Table, Column, Integer, String, MetaData
 from sqlalchemy.orm import relationship, backref
 from sqlalchemy.ext.declarative import declarative_base
 
@@ -9,6 +9,14 @@ metadata = MetaData(naming_convention=convention)
 
 Base = declarative_base(metadata=metadata)
 
+# Associations table => many-to-many relationship
+company_dev = Table(
+    'company_dev',
+    Base.metadata,
+    Column('company_id', Integer, ForeignKey('companies.id'), primary_key=True),
+    Column('dev_id', Integer, ForeignKey('devs.id'), primary_key=True)
+)
+
 class Company(Base):
     __tablename__ = 'companies'
 
@@ -17,6 +25,7 @@ class Company(Base):
     founding_year = Column(Integer(), nullable=False)
     
     freebies = relationship('Freebie', backref=backref('company'))
+    devs = relationship('Dev', secondary='company_dev', back_populates='companies')
     
     def __repr__(self):
         return f'<Company {self.name}>'
@@ -28,6 +37,7 @@ class Dev(Base):
     name= Column(String(), nullable=False)
     
     freebies = relationship('Freebie', backref=backref('dev'))
+    companies = relationship('Company', secondary='company_dev', back_populates='devs')
 
     def __repr__(self):
         return f'<Dev {self.name}>'
