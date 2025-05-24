@@ -16,8 +16,8 @@ class Company(Base):
     name = Column(String(), nullable=False)
     founding_year = Column(Integer(), nullable=False)
     
-    freebies = relationship('Freebie', backref=backref())
-
+    freebies = relationship('Freebie', backref=backref('company'))
+    
     def __repr__(self):
         return f'<Company {self.name}>'
 
@@ -26,6 +26,8 @@ class Dev(Base):
 
     id = Column(Integer(), primary_key=True)
     name= Column(String(), nullable=False)
+    
+    freebies = relationship('Freebie', backref=backref('dev'))
 
     def __repr__(self):
         return f'<Dev {self.name}>'
@@ -33,14 +35,13 @@ class Dev(Base):
 class Freebie(Base):
     __tablename__ = 'freebies'
     
-    id = Column(Integer(), primart_key=True)
+    id = Column(Integer(), primary_key=True)
     item_name = Column(String(), nullable=False)
     value = Column(Integer(), nullable=False)
     company_id = Column(Integer(), ForeignKey('companies.id'), nullable=False)
     dev_id = Column(Integer(), ForeignKey('devs.id'))
     
     def __repr__(self):
-        return f'<Freebie {self.item_name}'
-    
-    
-    # Built Freebies model & defined relationship with foreignkeys.
+        dev_name = self.dev.name if self.dev else "unknown Dev"
+        company_name = self.company.name if self.company else "unknown Company"
+        return f"<{dev_name} owns a {self.item_name} from {company_name}>"
