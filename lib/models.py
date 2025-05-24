@@ -25,7 +25,7 @@ class Company(Base):
     founding_year = Column(Integer(), nullable=False)
     
     freebies = relationship('Freebie', backref=backref('company'))
-    devs = relationship('Dev', secondary='company_dev', back_populates='companies')
+    devs = relationship('Dev', secondary=company_dev, back_populates='companies')
     
     def __repr__(self):
         return f'<Company {self.name}>'
@@ -37,7 +37,7 @@ class Dev(Base):
     name= Column(String(), nullable=False)
     
     freebies = relationship('Freebie', backref=backref('dev'))
-    companies = relationship('Company', secondary='company_dev', back_populates='devs')
+    companies = relationship('Company', secondary=company_dev, back_populates='devs')
 
     def __repr__(self):
         return f'<Dev {self.name}>'
@@ -49,7 +49,7 @@ class Freebie(Base):
     item_name = Column(String(), nullable=False)
     value = Column(Integer(), nullable=False)
     company_id = Column(Integer(), ForeignKey('companies.id'), nullable=False)
-    dev_id = Column(Integer(), ForeignKey('devs.id'))
+    dev_id = Column(Integer(), ForeignKey('devs.id'), nullable=False)
     
     def __repr__(self):
         dev_name = self.dev.name if self.dev else "unknown Dev"
