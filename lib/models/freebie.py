@@ -11,6 +11,12 @@ class Freebie(Base):
     dev_id = Column(Integer(), ForeignKey('devs.id'), nullable=False)
     
     def __repr__(self):
-        dev_name = self.dev.name if self.dev else "unknown Dev"
-        company_name = self.company.name if self.company else "unknown Company"
-        return f"<{dev_name} owns a {self.item_name} from {company_name}>"
+        return (
+            f'Freebie(id={self.id},'
+            f'item_name={self.item_name},'
+            f'value={self.value})'
+            )
+    
+    def print_details(self):
+           return f'{self.dev.name} owns a {self.item_name} from {self.company.name}'
+    
