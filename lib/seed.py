@@ -46,7 +46,7 @@ if __name__ == '__main__':
     # freebies has-manys
     freebies = []
     item_names = ['Pens', 'Tshirts', 'Uber-discounts', 'Notebook', 'stickers']
-    for _ in range(10):
+    for _ in range(5):
         freebie = Freebie(
             item_name=random.choice(item_names),
             value=random.randint(1,100),
