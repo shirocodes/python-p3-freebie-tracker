@@ -8,13 +8,13 @@ freebies companies give to developers. The project explores one-to-many and many
 ***
 
 ## Tech Stack
-- python 3.12 as the core programming language
-- SQLAlchemy -> ORM for managing models and database relationships
-- SQLite -> Lightweight relational database
-- Alembic -> Database migrations
-- Faker -> Generating fake names, companies, and values
-- pipenv -> Dependency and virtual environment manager
-- pdb -> Interactive debugging in Python 
+- *python 3.12*: core programming language
+- *SQLAlchemy*: ORM for managing models and database relationships
+- *SQLite*: Lightweight relational database
+- *Alembic*: Database migrations
+- *Faker*: Generating fake names, companies, and values
+- *pipenv*: Dependency and virtual environment manager
+- *pdb*: Interactive debugging in Python 
 
 ***
 
