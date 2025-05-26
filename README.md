@@ -22,7 +22,7 @@ freebies companies give to developers. The project explores one-to-many and many
 
 To identify Freebie as the `Source of Truth` and understand the relationships, interact with the following ERD diagram:
 
-![View ERD on dbdiagram.io](https://dbdiagram.io/d/68301318b9f7446da3ce581e)
+![ERD Diagram](./assets/erd.png)
   
 ***
 
