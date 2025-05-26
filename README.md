@@ -1,182 +1,110 @@
-# Phase 3 Mock Code Challenge: Freebie Tracker
+# Freebie Tracker
 
-## Learning Goals
+## Description
 
-- Write SQLAlchemy migrations.
-- Connect between tables using SQLAlchemy relationships.
-- Use SQLAlchemy to run CRUD statements in the database.
+A SQLAlchemy-based app that tracks developers, companies, and the 
+freebies companies give to developers. The project explores one-to-many and many-to-many relationships, model-level methods, and CLI-based querying via `debug.py`.
 
 ***
 
-## Key Vocab
+## Tech Stack
+- python 3.12 as the core programming language
+- SQLAlchemy -> ORM for managing models and database relationships
+- SQLite -> Lightweight relational database
+- Alembic -> Database migrations
+- Faker -> Generating fake names, companies, and values
+- pipenv -> Dependency and virtual environment manager
+- pdb -> Interactive debugging in Python 
 
-- **Schema**: the blueprint of a database. Describes how data relates to other
-  data in tables, columns, and relationships between them.
-- **Persist**: save a schema in a database.
-- **Engine**: a Python object that translates SQL to Python and vice-versa.
-- **Session**: a Python object that uses an engine to allow us to
-  programmatically interact with a database.
-- **Transaction**: a strategy for executing database statements such that
-  the group succeeds or fails as a unit.
-- **Migration**: the process of moving data from one or more databases to one
-  or more target databases.
+***
+
+## Entity Relationship Diagram (ERD)
+
+To identify Freebie as the `Source of Truth` and understand the relationships, interact with the following ERD diagram:
+
+![View ERD on dbdiagram.io](https://dbdiagram.io/d/68301318b9f7446da3ce581e)
   
 ***
 
-## Introduction
+## Model Overview
 
-For this assignment, we'll be working with a freebie domain.
-
-As developers, when you attend hackathons, you'll realize they hand out a lot of
-free items (informally called _freebies_, or swag)! Let's make an app for
-developers that keeps track of all the freebies they obtain.
-
-We have three models: `Company`, `Dev`, and `Freebie`
-
-For our purposes, a `Company` has many `Freebie`s, a `Dev` has many `Freebie`s,
+The model is such that: a `Company` has many `Freebie`s, a `Dev` has many `Freebie`s,
 and a `Freebie` belongs to a `Dev` and to a `Company`.
 
-`Company` - `Dev` is a many to many relationship.
-
-**Note**: You should draw your domain on paper or on a whiteboard _before you
-start coding_. Remember to identify a single source of truth for your data.
-
-## Instructions
-
-To get started, run `pipenv install && pipenv shell` while inside of this
-directory.
-
-Build out all of the methods listed in the deliverables. The methods are listed
-in a suggested order, but you can feel free to tackle the ones you think are
-easiest. Be careful: some of the later methods rely on earlier ones.
-
-**Remember!** This mock code challenge does not have tests. You cannot run
-`pytest` and you cannot run `learn test`. You'll need to create your own sample
-instances so that you can try out your code on your own. Make sure your
-relationships and methods work in the console before submitting.
-
-We've provided you with a tool that you can use to test your code. To use it,
-run `python debug.py` from the command line. This will start an `ipdb` session
-with your classes defined. You can test out the methods that you write here. You
-are also encouraged to use the `seed.py` file to create sample data to test your
-models and associations.
-
-Writing error-free code is more important than completing all of the
-deliverables listed- prioritize writing methods that work over writing more
-methods that don't work. You should test your code in the console as you write.
-
-Similarly, messy code that works is better than clean code that doesn't. First,
-prioritize getting things working. Then, if there is time at the end, refactor
-your code to adhere to best practices.
-
-**Before you submit!** Save and run your code to verify that it works as you
-expect. If you have any methods that are not working yet, feel free to leave
-comments describing your progress.
+`Company` - `Dev` is a many to many relationship, facilitated by the `company-dev` Association Table. 
 
 ***
 
-## What You Already Have
+## Usage
 
-The starter code has migrations and models for the initial `Company` and `Dev`
-models, and seed data for some `Company`s and `Dev`s. The schema currently looks
-like this:
+To get started:
+### Fork and clone this repository:
 
-### companies Table
+```console
+$ git clone https://github.com/<your-username>/<your-repo-name>.git
+cd <your-repo-name>/lib
+```
 
-| Column        | Type    |
-| ------------- | ------- |
-| name          | String  |
-| founding_year | Integer |
+### Install dependencies and activate virtual environment:
+Inside your directory, run `pipenv install && pipenv shell`.
 
-### devs Table
+### Reset and seed the database:
 
-| Column | Type   |
-| ------ | ------ |
-| name   | String |
+```console
+$ cd lib/
+$ python3 reset_db.py
+# => Deleted old database: freebies.db
+# => Running alembic migrations ...
+# => INFO  [alembic.runtime.migration] Running upgrade ...
+# => Seeded database.
+# => Reset complete! Begin querying.
+```
 
-You will need to create the migration for the `freebies` table using the
-attributes specified in the deliverables below.
+This will:
+- Delete the old SQLite database (freebies.db)
 
-***
+- Run all Alembic migrations
 
-## Deliverables
+- Seed new fake data using Faker
 
-Write the following methods in the classes in the files provided. Feel free to
-build out any helper methods if needed.
+### Start the interactive debugger:
 
-Remember: SQLAlchemy gives your classes access to a lot of methods already!
-Keep in mind what methods SQLAlchemy gives you access to on each of your
-classes when you're approaching the deliverables below.
+This lets you test queries and helper functions in a live session.
 
-### Migrations
+```console
+$ cd lib/
+$ python3 debug.py
+```
 
-Before working on the rest of the deliverables, you will need to create a
-migration for the `freebies` table.
+### Try out a few example queries:
+Once inside the debugger `(pdb> prompt)`, you can run things like:
 
-- A `Freebie` belongs to a `Dev`, and a `Freebie` also belongs to a `Company`.
-  In your migration, create any columns your `freebies` table will need to
-  establish these relationships using the right foreign keys.
-- The `freebies` table should also have:
-  - An `item_name` column that stores a string.
-  - A `value` column that stores an integer.
+```console
+session.query(Dev).first()
+get_devs_with_this_freebie(session, 'Pens')
+create_dev(session, "Jane Doe")
+update_freebie_value(session, 3, 75)
+```
 
-After creating the `freebies` table using a migration, use the `seed.py` file to
-create instances of your `Freebie` class so you can test your code.
+**note** You can exit debugger session with `exit()`
 
-**After you've set up your `freebies` table**, work on building out the following
-deliverables.
+*** 
 
-### Relationship Attributes and Methods
+## Contributions 
+- Create a feature branch: `git checkout -b your-feature`
 
-Use SQLAlchemy's `ForeignKey`, `relationship()`, and `backref()` objects to
-build relationships between your three models.
+- Commit your changes: `git commit -m "Add feature"`
 
-**Note**: The plural of "freebie" is "freebies" and the singular of "freebies"
-is "freebie".
+- Push to your fork: `git push origin your-feature`
 
-#### Freebie
+- Open a Pull Request
 
-- `Freebie.dev` returns the `Dev` instance for this Freebie.
-- `Freebie.company` returns the `Company` instance for this Freebie.
+**Caution:** Please ensure changes are tested and maintain clean code practices.
 
-#### Company
+## License 
+This project is licensed under the *MIT License*.
 
-- `Company.freebies` returns a collection of all the freebies for the Company.
-- `Company.devs` returns a collection of all the devs who collected freebies
-  from the company.
+## Author
+Developed with ❤️ by *Wanjiru Muchiri*
 
-#### Dev
 
-- `Dev.freebies` returns a collection of all the freebies that the Dev has collected.
-- `Dev.companies`returns a collection of all the companies that the Dev has collected
-  freebies from.
-
-Use `python debug.py` and check that these methods work before proceeding. For
-example, you should be able to retrieve a dev from the database by its
-attributes and view their companies with `dev.companies` (based on your seed
-data).
-
-### Aggregate Methods
-
-#### Freebie
-
-- `Freebie.print_details()`should return a string formatted as follows:
-  `{dev name} owns a {freebie item_name} from {company name}`.
-
-#### Company
-
-- `Company.give_freebie(dev, item_name, value)` takes a `dev` (an instance of
-  the `Dev` class), an `item_name` (string), and a `value` as arguments, and
-  creates a new `Freebie` instance associated with this company and the given
-  dev.
-- Class method `Company.oldest_company()`returns the `Company` instance with
-  the earliest founding year.
-
-#### Dev
-
-- `Dev.received_one(item_name)` accepts an `item_name` (string) and returns
-  `True` if any of the freebies associated with the dev has that `item_name`,
-  otherwise returns `False`.
-- `Dev.give_away(dev, freebie)` accepts a `Dev` instance and a `Freebie`
-  instance, changes the freebie's dev to be the given dev; your code should only
-  make the change if the freebie belongs to the dev who's giving it away
